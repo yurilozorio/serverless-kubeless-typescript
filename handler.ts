@@ -1,1 +1,1 @@
-export { hello } from "./functions/hello";
+export { hello } from './functions/hello';

@@ -4,19 +4,29 @@ service:
 #app: your-app-name
 #org: your-org-name
 
-custom:
-  webpack:
-    webpackConfig: ./webpack.config.js
-    includeModules: true
-
-# Add the serverless-webpack plugin
 plugins:
   - serverless-webpack
   - serverless-kubeless
+  - serverless-stage-manager
 
 provider:
   name: kubeless
   runtime: nodejs12
+  stage: ${opt:stage,'dev'}
+  environment:
+    ENV_URL: ${self:custom.envUrl.${self:provider.stage}}
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: false
+  stages:
+    - dev
+    - prod
+  envUrl:
+    local: http://localhost:3030
+    dev: http://localhost:3030
+    prod: http://localhost:3030
 
 functions:
   hello:
